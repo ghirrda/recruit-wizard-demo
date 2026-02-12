@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Recruit Wizard | Master v85 (v70 + Smart Questions)</title>
+    <title>Recruit Wizard Pro | v98 (Blue Ocean Secure)</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <style>
         /* --- VISUAL CORE: GOLDILOCKS SIZE --- */
@@ -19,6 +19,44 @@
         * { box-sizing: border-box; outline: none; }
         body { font-family: 'Inter', sans-serif; background: var(--bg); color: var(--text-main); margin: 0; display: flex; height: 100vh; overflow: hidden; font-size: 13.5px; }
 
+        /* --- BLUE OCEAN LOGIN (Updated Key) --- */
+        #login-screen { 
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%; 
+            background: linear-gradient(135deg, #020024 0%, #090979 35%, #00d4ff 100%); /* Blue Ocean Gradient */
+            z-index: 9999; display: flex; justify-content: center; align-items: center; 
+            flex-direction: column; color: white; transition: opacity 0.6s ease-out; 
+        }
+        .login-box { 
+            background: rgba(255, 255, 255, 0.1); 
+            padding: 50px 40px; 
+            border-radius: 20px; 
+            border: 1px solid rgba(255, 255, 255, 0.2); 
+            text-align: center; 
+            backdrop-filter: blur(15px); /* Glass Effect */
+            width: 360px; 
+            box-shadow: 0 20px 50px rgba(0,0,0,0.3);
+        }
+        .login-input { 
+            background: rgba(0,0,0,0.2); 
+            border: 1px solid rgba(255,255,255,0.3); 
+            color: white; 
+            margin-top: 25px; 
+            text-align: center; 
+            letter-spacing: 3px; 
+            font-weight: 700; 
+            font-size: 1.1rem; 
+            padding: 15px;
+            border-radius: 8px;
+            width: 100%;
+        }
+        .login-input::placeholder { color: rgba(255,255,255,0.5); }
+        .login-btn {
+            margin-top: 20px; width: 100%; padding: 15px; border-radius: 8px; border: none;
+            background: white; color: #090979; font-weight: 800; cursor: pointer;
+            transition: 0.2s; font-size: 1rem; letter-spacing: 1px;
+        }
+        .login-btn:hover { background: #e0f2fe; transform: translateY(-2px); box-shadow: 0 10px 20px rgba(0,0,0,0.2); }
+        
         /* --- SIDEBAR --- */
         .sidebar { width: var(--sidebar-w); background: #0f172a; color: white; display: flex; flex-direction: column; padding: 20px; flex-shrink: 0; z-index: 10; }
         .brand { font-size: 1.2rem; font-weight: 800; margin-bottom: 25px; display: flex; align-items: center; gap: 8px; color: white; letter-spacing: -0.03em; }
@@ -29,7 +67,6 @@
         .mode-btn.active { background: var(--primary); color: white; box-shadow: 0 2px 4px rgba(0,0,0,0.2); }
 
         .nav-item { padding: 10px 14px; margin-bottom: 4px; border-radius: 8px; cursor: pointer; color: #94a3b8; font-weight: 500; font-size: 0.85rem; transition: 0.2s; display: flex; align-items: center; gap: 12px; }
-        .nav-item:hover { background: rgba(255,255,255,0.08); color: white; }
         .nav-item.active { background: rgba(255,255,255,0.15); color: white; font-weight: 700; border-left: 3px solid var(--primary-light); }
 
         /* --- MAIN AREA --- */
@@ -97,9 +134,11 @@
         .question-box { background: white; padding: 10px 12px; border-radius: 6px; border: 1px solid #e2e8f0; font-size: 0.8rem; margin-bottom: 6px; border-left: 3px solid var(--primary); color: #334155; }
 
         /* --- FORMS & SKILLS --- */
-        input, textarea { width: 100%; padding: 10px 12px; border: 1px solid #cbd5e1; border-radius: 8px; font-family: inherit; margin-bottom: 12px; background: #fff; font-size: 0.9rem; }
+        input, textarea, select { width: 100%; padding: 10px 12px; border: 1px solid #cbd5e1; border-radius: 8px; font-family: inherit; margin-bottom: 12px; background: #fff; font-size: 0.9rem; }
         .btn-primary { background: var(--primary); color: white; border: none; padding: 12px; width: 100%; border-radius: 8px; font-weight: 600; cursor: pointer; transition: 0.2s; font-size: 0.9rem; box-shadow: 0 2px 4px -1px rgba(79, 70, 229, 0.2); }
         .btn-primary:hover { background: #4338ca; transform: translateY(-1px); }
+        .btn-sec { background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2); color: #cbd5e1; padding: 8px; border-radius: 6px; font-size: 0.8rem; width: 100%; cursor: pointer; margin-bottom: 5px; }
+        .btn-sec:hover { background: rgba(255,255,255,0.2); color: white; }
         
         .btn-magic { background: linear-gradient(135deg, #6366f1, #ec4899); color: white; border:none; padding:12px; border-radius:8px; font-weight:700; width:100%; cursor:pointer; margin-bottom:15px; transition:0.2s; box-shadow:0 4px 6px -1px rgba(0,0,0,0.1); }
         .btn-magic:hover { opacity: 0.9; transform:translateY(-1px); }
@@ -108,7 +147,12 @@
         .skill-tag.required { background: var(--primary); color: white; border-color: var(--primary); }
         .skill-tag.required::before { content: '★ '; }
 
-        /* --- VAULT (RETAIN) & BATTLE --- */
+        /* --- FORECAST & SOURCING --- */
+        .forecast-box { background: #f0f9ff; border: 1px solid #bae6fd; padding: 10px; border-radius: 8px; margin-bottom: 15px; display:none; }
+        .forecast-val { font-size: 1.2rem; font-weight: 800; color: #0284c7; }
+        .boolean-box { background: #eff6ff; border: 1px solid #bfdbfe; padding: 8px; border-radius: 6px; font-family: monospace; color: #1e3a8a; font-size:0.8rem; word-break: break-all; margin-top:5px; }
+
+        /* --- VAULT & BATTLE --- */
         .vault-item { padding: 10px; border: 1px solid #e2e8f0; border-radius: 6px; margin-bottom: 6px; display: flex; justify-content: space-between; align-items: center; background: white; transition:0.2s; cursor: pointer; }
         .vault-item:hover { border-color: var(--primary); transform: translateX(2px); }
         
@@ -116,9 +160,33 @@
         .bt-row { display: contents; }
         .bt-cell { padding: 14px; border-bottom: 1px solid #f1f5f9; border-right: 1px solid #f1f5f9; font-size: 0.8rem; vertical-align: top; }
         .bt-label-col { background: #f8fafc; font-weight: 700; color: #64748b; width: 150px; text-transform: uppercase; font-size: 0.65rem; padding-top: 16px; }
+
+        /* --- PRINT MODE --- */
+        @media print {
+            .sidebar, .top-bar, .menu-toggle, .btn-primary, .btn-magic, #selector-grid, .card-head button { display: none !important; }
+            .main-area { padding: 0; overflow: visible; }
+            .card { box-shadow: none; border: 1px solid #000; break-inside: avoid; }
+            body { background: white; height: auto; overflow: visible; }
+            #view-compare { display: block !important; }
+            .view-panel { display: none; }
+            #view-compare.active { display: block; }
+        }
+        
+        .file-input { display: none; }
     </style>
 </head>
 <body>
+
+    <div id="login-screen">
+        <div class="login-box">
+            <div style="font-size:3rem; margin-bottom:15px;">🔱</div>
+            <h2 style="margin:0; font-weight:900; letter-spacing:-1px;">Recruit Wizard Pro</h2>
+            <p style="opacity:0.8; font-size:0.9rem; margin-top:5px; font-weight:300;">Blue Ocean Edition v98</p>
+            <input type="password" id="license-key" class="login-input" placeholder="LICENSE KEY">
+            <button onclick="window.App.login()" class="login-btn">ENTER SYSTEM</button>
+            <p style="font-size:0.75rem; margin-top:20px; opacity:0.6; color:#bae6fd;">Demo Key: blueocean</p>
+        </div>
+    </div>
 
     <nav class="sidebar">
         <div class="brand">Recruit<span>Wizard</span></div>
@@ -131,11 +199,16 @@
         <div class="nav-item active" id="nav-dash" onclick="window.App.nav('dashboard')"><span>&#128202;</span> <span id="lbl-dash">Role Audit</span></div>
         <div class="nav-item" id="nav-cand" onclick="window.App.nav('candidates')"><span>&#128101;</span> <span id="lbl-cand">Talent Pipeline</span></div>
         <div class="nav-item" id="nav-comp" onclick="window.App.nav('compare')"><span>&#9878;</span> <span id="lbl-comp">Battle Matrix</span></div>
+        <div class="nav-item" id="nav-set" onclick="window.App.nav('settings')"><span>⚙️</span> <span id="lbl-set">Settings</span></div>
         
-        <div style="margin-top:auto; padding:15px; background:rgba(255,255,255,0.05); border-radius:10px;">
-            <label style="font-size:0.75rem; color:#94a3b8; cursor:pointer;"><input type="checkbox" id="blind-mode" onchange="window.App.renderList()"> DEI Blind Mode</label>
+        <div style="margin-top:auto; padding-top:15px; border-top:1px solid rgba(255,255,255,0.1);">
+            <div style="font-size:0.65rem; color:#94a3b8; margin-bottom:8px; font-weight:700;">DATA MANAGEMENT</div>
+            <button class="btn-sec" onclick="window.App.exportData()">💾 Save File</button>
+            <button class="btn-sec" onclick="document.getElementById('upload-json').click()">📂 Load File</button>
+            <input type="file" id="upload-json" class="file-input" onchange="window.App.importData(this)">
         </div>
-        <div style="margin-top:10px; font-size:0.6rem; color:#64748b; text-align:center;">System v85.0 (v70 + Smart Qs)</div>
+        
+        <div style="margin-top:15px; font-size:0.6rem; color:#64748b; text-align:center;">System v98.0 (Blue Ocean)</div>
     </nav>
 
     <main class="main-area">
@@ -143,7 +216,6 @@
             <h1 class="page-title">Evidence Intelligence</h1>
             <div style="display:flex; gap:10px;">
                 <button onclick="if(confirm('Full Reset?')){localStorage.clear();location.reload()}" style="padding:8px 16px; border:1px solid #fca5a5; color:#dc2626; border-radius:8px; background:white; cursor:pointer; font-weight:600;">Reset</button>
-                <button onclick="window.print()" style="padding:8px 16px; border:1px solid #cbd5e1; background:white; border-radius:8px; font-weight:600; cursor:pointer; color:#475569;">Export Report</button>
             </div>
         </div>
 
@@ -154,12 +226,20 @@
                     <input type="text" id="role-title" placeholder="Job Title (e.g. Credit Controller)" onkeyup="window.App.analyzeJD()">
                     <textarea id="jd-text" placeholder="Paste JD text here..." oninput="window.App.analyzeJD()" style="height:150px;"></textarea>
                     
+                    <div id="forecast-card" class="forecast-box">
+                        <div style="display:flex; justify-content:space-between; align-items:center;">
+                            <span style="font-size:0.75rem; font-weight:700; color:#0369a1; text-transform:uppercase;">Time to Hire Prediction</span>
+                            <span class="forecast-val" id="forecast-days">-- Days</span>
+                        </div>
+                        <div style="font-size:0.75rem; color:#64748b; margin-top:5px;" id="forecast-reason"></div>
+                    </div>
+
                     <div class="card-head" style="border:none; margin-top:10px;">Must-Have Skills (Star ★ to Weight)</div>
                     <div style="display:flex; gap:10px; margin-bottom:15px;">
                         <input type="text" id="new-skill" placeholder="Add custom skill..." style="margin-bottom:0;" onkeypress="if(event.key==='Enter') window.App.addSkill()">
                         <button class="btn-primary" onclick="window.App.addSkill()" style="width:auto; padding:10px 20px;">+</button>
                     </div>
-                    <div id="skill-cloud" style="display:flex; flex-wrap:wrap; gap:5px;"></div>
+                    <div id="skill-cloud" style="display:flex; flex-wrap:wrap; gap:5px; padding-top:10px;"></div>
                 </div>
                 
                 <div class="card">
@@ -168,6 +248,9 @@
                     
                     <button class="btn-magic" onclick="window.App.generateAdvert()">✨ Generate High-Converting Ad</button>
                     
+                    <button class="btn-primary" onclick="window.App.generateSourcing()" style="background:white; color:var(--primary); border:1px solid var(--primary); margin-bottom:15px;">🎯 Generate Boolean Search</button>
+                    <div id="sourcing-output" style="display:none; margin-bottom:15px;"></div>
+
                     <div id="rewrite-output" class="rewrite-box">
                         <div class="rewrite-title">AIDA Optimized Advert (DEI Safe)</div>
                         <div id="rewrite-text" class="rewrite-content"></div>
@@ -216,10 +299,32 @@
 
         <div id="view-compare" class="view-panel">
             <div class="card">
-                <div class="card-head" id="compare-head">Comparison Matrix</div>
+                <div class="card-head" id="compare-head">
+                    <span>Comparison Matrix</span>
+                    <button onclick="window.print()" style="background:none; border:1px solid #cbd5e1; padding:4px 8px; border-radius:4px; cursor:pointer;">🖨️ Print PDF</button>
+                </div>
+                <div id="report-header" style="display:none; margin-bottom:20px; border-bottom:2px solid black; padding-bottom:10px;">
+                    <h2 style="margin:0;">Executive Talent Report</h2>
+                    <div id="report-meta" style="font-size:0.9rem; color:#64748b;"></div>
+                </div>
                 <div id="selector-grid" style="margin-bottom:20px; display:flex; gap:5px; flex-wrap:wrap;"></div>
                 <button class="btn-primary" style="width:auto; padding:12px 30px;" onclick="window.App.generateBattle()">Generate Report</button>
                 <div id="battle-output" style="margin-top:20px;"></div>
+            </div>
+        </div>
+
+        <div id="view-settings" class="view-panel">
+            <div class="card" style="max-width:600px;">
+                <div class="card-head">System Calibration</div>
+                <label style="font-weight:600; font-size:0.9rem;">Organization Name (For Reports)</label>
+                <input type="text" id="org-name" placeholder="e.g. ING Global Talent" onchange="window.App.saveSettings()">
+                
+                <label style="font-weight:600; font-size:0.9rem;">Hiring Velocity Baseline (Days)</label>
+                <select id="base-days" onchange="window.App.saveSettings()">
+                    <option value="25">Fast (Startup) - 25 Days</option>
+                    <option value="35" selected>Standard (Corporate) - 35 Days</option>
+                    <option value="50">Slow (Enterprise) - 50 Days</option>
+                </select>
             </div>
         </div>
     </main>
@@ -227,10 +332,10 @@
     <script>
         window.App = {
             mode: 'find', 
-            data: { role: "", skills: [], candidates: [], roleLibrary: [] },
+            data: { role: "", skills: [], candidates: [], roleLibrary: [], settings: { org: "My Organization", baseDays: 35 } },
             selected: [],
             
-            // --- THESAURUS (v70) ---
+            // --- THE SAUCE (Core Logic) ---
             thesaurus: {
                 "Finance": ["accounting", "ledger", "tax", "audit", "fp&a", "reporting", "payroll", "sage", "xero", "cpa", "acca", "cima", "profit", "loss", "balance sheet"],
                 "Sales": ["business development", "account manager", "b2b", "closing", "pipeline", "gtm", "revenue", "negotiation", "prospecting", "quota", "ote"],
@@ -246,52 +351,43 @@
                 "AWS": ["amazon web services", "cloud", "ec2", "s3", "lambda"]
             },
 
-            // DEI REPLACEMENTS
             deiDictionary: {
                 "ninja": "Specialist", "rockstar": "Expert", "aggressive": "Driven", "dominant": "Leading", 
                 "work hard play hard": "Balanced Culture", "manpower": "Workforce", "guru": "Subject Matter Expert",
                 "hacker": "Engineer", "guys": "Team", "salesman": "Salesperson"
             },
 
-            // HUMAN TOUCH: SENTENCE STARTERS
-            starters: [
-                "Proven track record in", "Strong background in", "Demonstrated experience with", 
-                "Proficiency in", "Solid understanding of", "Hands-on experience with"
-            ],
-
-            // INTERNAL VAULT PRE-LOAD
+            starters: [ "Proven track record in", "Strong background in", "Demonstrated experience with", "Proficiency in", "Solid understanding of", "Hands-on experience with" ],
             seedVault: [
                 {id: 1, title: "Finance Manager", text: "Requires Finance, Budget, Forecast, Excel, Leadership."},
-                {id: 2, title: "Java Developer", text: "Must have Java, AWS, SQL, Agile, React."},
-                {id: 3, title: "Sales Director", text: "Sales, CRM, Strategy, Leadership, Negotiation."},
-                {id: 4, title: "HR Business Partner", text: "HR, Employee Relations, Strategy, Compliance."},
-                {id: 5, title: "Operations Lead", text: "Operations, Project Management, Stakeholder, Risk."}
+                {id: 2, title: "Java Developer", text: "Must have Java, AWS, SQL, Agile, React."}
             ],
+
+            // --- 1. LOGIN LOGIC ---
+            login: function() {
+                const key = document.getElementById('license-key').value;
+                if(key === "blueocean") {
+                    document.getElementById('login-screen').style.opacity = 0;
+                    setTimeout(() => document.getElementById('login-screen').style.display = 'none', 500);
+                    this.init();
+                } else { alert("Invalid Product Key"); }
+            },
 
             init: function() {
                 try {
-                    // NEW KEY v85 TO ENSURE CLEAN START WITH V70 LOGIC
-                    const d = localStorage.getItem('rw_master_v85');
-                    if(d) {
-                        this.data = JSON.parse(d);
-                    } else {
-                        this.data.roleLibrary = this.seedVault;
-                    }
+                    const d = localStorage.getItem('rw_pro_v98');
+                    if(d) this.data = JSON.parse(d);
+                    else this.data.roleLibrary = this.seedVault;
                     
-                    if(!this.data.roleLibrary) this.data.roleLibrary = this.seedVault;
+                    if(!this.data.settings) this.data.settings = { org: "My Organization", baseDays: 35 };
                     if(!this.data.skills) this.data.skills = [];
                     if(!this.data.candidates) this.data.candidates = [];
-                    
-                    let fixed = false;
-                    this.data.candidates.forEach((c, i) => {
-                        this.data.candidates[i] = { ...c, ...this.calculateMatch(c.text) };
-                        fixed = true;
-                    });
-                    if(fixed) this.save();
 
-                    const rInput = document.getElementById('role-title');
-                    if(rInput) rInput.value = this.data.role || "";
-                    
+                    // Hydrate UI
+                    if(document.getElementById('role-title')) document.getElementById('role-title').value = this.data.role || "";
+                    if(document.getElementById('org-name')) document.getElementById('org-name').value = this.data.settings.org;
+                    if(document.getElementById('base-days')) document.getElementById('base-days').value = this.data.settings.baseDays;
+
                     this.renderSkills();
                     this.renderList();
                     this.setMode('find');
@@ -301,9 +397,44 @@
             save: function() {
                 const rInput = document.getElementById('role-title');
                 if(rInput) this.data.role = rInput.value;
-                localStorage.setItem('rw_master_v85', JSON.stringify(this.data));
+                localStorage.setItem('rw_pro_v98', JSON.stringify(this.data));
             },
 
+            saveSettings: function() {
+                this.data.settings.org = document.getElementById('org-name').value;
+                this.data.settings.baseDays = parseInt(document.getElementById('base-days').value);
+                this.save();
+                this.analyzeJD(); // Re-calc forecast
+                alert("Settings Saved & Algorithm Calibrated.");
+            },
+
+            // --- 2. DATA MANAGEMENT ---
+            exportData: function() {
+                const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(this.data));
+                const node = document.createElement('a');
+                node.setAttribute("href", dataStr);
+                node.setAttribute("download", `recruit_project_${Date.now()}.json`);
+                document.body.appendChild(node);
+                node.click();
+                node.remove();
+            },
+
+            importData: function(input) {
+                const file = input.files[0];
+                if(!file) return;
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    try {
+                        window.App.data = JSON.parse(e.target.result);
+                        window.App.save();
+                        alert("Project Loaded Successfully. Reloading...");
+                        location.reload();
+                    } catch(err) { alert("Invalid File Format"); }
+                };
+                reader.readAsText(file);
+            },
+
+            // --- 3. LOGIC ENGINES ---
             expandConcept: function(word) {
                 const lower = word.toLowerCase();
                 for (const [key, synonyms] of Object.entries(this.thesaurus)) {
@@ -317,7 +448,76 @@
                 return str.toLowerCase().split(' ').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ');
             },
 
-            // --- AUTO-WRITER ENGINE (v70 Human Touch) ---
+            // --- FORECASTER AGENT ---
+            calculateForecast: function(text) {
+                let base = this.data.settings.baseDays || 35;
+                let reason = "Standard Baseline";
+                const t = text.toLowerCase();
+                const title = document.getElementById('role-title').value.toLowerCase();
+
+                if (title.includes('senior') || title.includes('lead')) { base += 10; reason = "Seniority (+10 Days)"; }
+                if (title.includes('head') || title.includes('director')) { base += 25; reason = "Executive Search (+25 Days)"; }
+                if (t.includes('engineer') || t.includes('developer')) { base += 12; reason = "Tech Market Competition (+12 Days)"; }
+                if (t.includes('remote')) { base -= 5; reason = "Remote Flexibility (-5 Days)"; }
+
+                document.getElementById('forecast-card').style.display = 'block';
+                document.getElementById('forecast-days').innerText = base + " - " + (base + 10) + " Days";
+                document.getElementById('forecast-reason').innerText = "Driver: " + reason;
+            },
+
+            generateSourcing: function() {
+                const title = document.getElementById('role-title').value || "Job Title";
+                const skills = this.data.skills.slice(0, 3).map(s=>s.name).join('" OR "');
+                const bool = `site:linkedin.com/in/ ("${title}") AND ("${skills}")`;
+                const div = document.getElementById('sourcing-output');
+                div.style.display = 'block';
+                div.innerHTML = `<div class="boolean-box">${bool}</div>`;
+            },
+
+            analyzeJD: function() {
+                const t = document.getElementById('jd-text').value;
+                const cleanT = t.toLowerCase();
+                
+                // Forecast Trigger
+                if(cleanT.length > 50) this.calculateForecast(cleanT);
+
+                if(cleanT.length < 20) { document.getElementById('score-advert').innerText = "--%"; return; }
+                
+                let detectedConcepts = [];
+                for (const [key, synonyms] of Object.entries(this.thesaurus)) {
+                    const allTerms = [key.toLowerCase(), ...synonyms];
+                    if (allTerms.some(term => new RegExp(`\\b${term}\\b`, 'i').test(cleanT))) {
+                        detectedConcepts.push(key.toUpperCase());
+                    }
+                }
+                const gist = detectedConcepts.length > 0 ? detectedConcepts[0] : "GENERAL";
+                document.getElementById('ad-summary').innerHTML = `<div class="summary-box"><strong>Semantic Summary:</strong> System identifies this text as a <b>${gist}</b> role.<br>Detected concepts: ${detectedConcepts.slice(0,3).join(', ')}.</div>`;
+                const demands = (cleanT.match(/must|require|expect|essential|need/g)||[]).length;
+                const benefits = (cleanT.match(/offer|benefit|gain|opportunity|grow/g)||[]).length;
+                let ratioMsg = "";
+                if(demands > (benefits * 2)) {
+                    ratioMsg = `<div class="advice-card insight"><b>Psychological Insight (Give/Get Ratio):</b><br>This ad is <b>Demanding</b>. You list ${demands} requirements but only ${benefits || 0} benefits.<br><i>Insight:</i> Ads with high demand ratios have a 40% higher bounce rate.</div>`;
+                }
+                document.getElementById('ratio-analysis').innerHTML = ratioMsg;
+                let adviceHTML = "";
+                if(!cleanT.includes('salary') && !cleanT.includes('£')) adviceHTML += `<div class="advice-card alert"><b>Salary Missing (Critical):</b> Candidates skip ads without ranges.</div>`;
+                const hasKPIs = (cleanT.match(/%|revenue|growth|roi/g)||[]).length > 0;
+                if(!hasKPIs) adviceHTML += `<div class="advice-card tip"><b>KPI Check (Missing):</b> You list duties, not outcomes.</div>`;
+                document.getElementById('expert-advice').innerHTML = adviceHTML;
+                let score = 0;
+                let html = `<div class="meter-bg"><div class="meter-fill" style="width:0%"></div></div>`;
+                const pillars = [{ label: "Salary/Comp", found: cleanT.includes('salary') || cleanT.includes('£') }, { label: "Outcomes/KPIs", found: hasKPIs }, { label: "Soft Skill DNA", found: (cleanT.match(/team|lead|culture/g)||[]).length > 0 }];
+                let checkHtml = "";
+                pillars.forEach(p => { if(p.found) score += 33; checkHtml += `<span class="gap-pill ${p.found?'present':'missing'}">${p.found?'✓':'⚠️'} ${p.label}</span>`; });
+                document.getElementById('score-advert').innerText = Math.min(100, score) + "%";
+                document.getElementById('gap-visuals').innerHTML = html.replace('0%', score+'%') + checkHtml;
+                if(this.data.skills.length === 0) {
+                    detectedConcepts.forEach(c => { if(!this.data.skills.find(s=>s.name===c)) this.data.skills.push({name: c, required: false}); });
+                    this.renderSkills();
+                }
+                this.save();
+            },
+
             generateAdvert: function() {
                 this.analyzeJD();
                 const titleInput = document.getElementById('role-title').value;
@@ -334,177 +534,56 @@
                     const starter = this.starters[Math.floor(Math.random() * this.starters.length)];
                     return `• ${starter} ${this.toTitleCase(s.name)}.`;
                 }).join('\n');
-                const html = `
-**${title}**
-*${hasRemote} | ${salary}*
-
-**Are you a ${title} looking for your next challenge?**
-We are looking for a driven professional to join a high-performance team. If you thrive in dynamic environments and want to make a tangible impact, this is the role for you.
-
-**The Opportunity (Why Join?):**
-• Work on projects that matter.
-• Join a collaborative, inclusive culture.
-• Clear pathway for career progression.
-
-**What you will bring (Requirements):**
-${reqs}
-• Strong communication and stakeholder management skills.
-
-**The Package:**
-• ${salary}
-• Comprehensive benefits package.
-• Commitment to work-life balance.
-
-**Interested?**
-Click Apply Now to start your journey with us.`;
+                const html = `**${title}**\n*${hasRemote} | ${salary}*\n\n**Are you a ${title} looking for your next challenge?**\nWe are looking for a driven professional to join a high-performance team. If you thrive in dynamic environments and want to make a tangible impact, this is the role for you.\n\n**The Opportunity (Why Join?):**\n• Work on projects that matter.\n• Join a collaborative, inclusive culture.\n• Clear pathway for career progression.\n\n**What you will bring (Requirements):**\n${reqs}\n• Strong communication and stakeholder management skills.\n\n**The Package:**\n• ${salary}\n• Comprehensive benefits package.\n• Commitment to work-life balance.\n\n**Interested?**\nClick Apply Now to start your journey with us.`;
                 document.getElementById('rewrite-output').style.display = 'block';
                 document.getElementById('rewrite-text').innerText = html.trim();
             },
 
-            // --- AUDIT ---
-            analyzeJD: function() {
-                const t = document.getElementById('jd-text').value;
-                const title = document.getElementById('role-title').value.toLowerCase();
-                const cleanT = t.toLowerCase();
-                if(cleanT.length < 20) {
-                    document.getElementById('score-advert').innerText = "--%";
-                    return;
-                }
-                let detectedConcepts = [];
-                for (const [key, synonyms] of Object.entries(this.thesaurus)) {
-                    const allTerms = [key.toLowerCase(), ...synonyms];
-                    if (allTerms.some(term => new RegExp(`\\b${term}\\b`, 'i').test(cleanT))) {
-                        detectedConcepts.push(key.toUpperCase());
-                    }
-                }
-                const gist = detectedConcepts.length > 0 ? detectedConcepts[0] : "GENERAL";
-                document.getElementById('ad-summary').innerHTML = `
-                    <div class="summary-box">
-                        <strong>Semantic Summary:</strong> System identifies this text as a <b>${gist}</b> role.<br>
-                        Detected concepts: ${detectedConcepts.slice(0,3).join(', ')}.
-                    </div>`;
-                const demands = (cleanT.match(/must|require|expect|essential|need/g)||[]).length;
-                const benefits = (cleanT.match(/offer|benefit|gain|opportunity|grow/g)||[]).length;
-                let ratioMsg = "";
-                if(demands > (benefits * 2)) {
-                    ratioMsg = `<div class="advice-card insight">
-                        <b>Psychological Insight (Give/Get Ratio):</b><br>
-                        This ad is <b>Demanding</b>. You list ${demands} requirements but only ${benefits || 0} benefits.<br>
-                        <i>Insight:</i> Ads with high demand ratios have a 40% higher bounce rate.
-                    </div>`;
-                }
-                document.getElementById('ratio-analysis').innerHTML = ratioMsg;
-                let adviceHTML = "";
-                if(!cleanT.includes('salary') && !cleanT.includes('£')) adviceHTML += `<div class="advice-card alert"><b>Salary Missing (Critical):</b> Candidates skip ads without ranges.<br><i>Fix: Add 'Salary: £40k-£50k' or a competitive band.</i></div>`;
-                const hasKPIs = (cleanT.match(/%|revenue|growth|roi/g)||[]).length > 0;
-                if(!hasKPIs) adviceHTML += `<div class="advice-card tip"><b>KPI Check (Missing):</b> You list duties, not outcomes.<br><i>Fix: Add a bullet point like 'Increase efficiency by 15%' or 'Manage budget of £1M'.</i></div>`;
-                if(gist === "SALES" && !cleanT.includes('commission')) adviceHTML += `<div class="advice-card alert"><b>Sales Risk:</b> Missing 'Commission' keyword.<br><i>Fix: Add 'Uncapped Commission' or 'OTE' clearly.</i></div>`;
-                if(cleanT.includes('responsible for')) adviceHTML += `<div class="advice-card tip"><b>Tone Check:</b> 'Responsible for' is passive.<br><i>Fix: Change to active verbs like 'Drive', 'Build', 'Lead', or 'Create'.</i></div>`;
-                document.getElementById('expert-advice').innerHTML = adviceHTML;
-                let score = 0;
-                let html = `<div class="meter-bg"><div class="meter-fill" style="width:0%"></div></div>`;
-                const pillars = [
-                    { label: "Salary/Comp", found: cleanT.includes('salary') || cleanT.includes('£') },
-                    { label: "Outcomes/KPIs", found: hasKPIs },
-                    { label: "Soft Skill DNA", found: (cleanT.match(/team|lead|culture/g)||[]).length > 0 }
-                ];
-                let checkHtml = "";
-                pillars.forEach(p => {
-                    if(p.found) score += 33;
-                    checkHtml += `<span class="gap-pill ${p.found?'present':'missing'}">${p.found?'✓':'⚠️'} ${p.label}</span>`;
-                });
-                document.getElementById('score-advert').innerText = Math.min(100, score) + "%";
-                document.getElementById('gap-visuals').innerHTML = html.replace('0%', score+'%') + checkHtml;
-                if(this.data.skills.length === 0) {
-                    detectedConcepts.forEach(c => {
-                        this.data.skills.push({name: c, required: false});
-                    });
-                    this.renderSkills();
-                }
-                this.save();
-            },
-
-            // --- MATCHING ---
             calculateMatch: function(text, targetJD = null) {
                 const t = text.toLowerCase();
                 const jdContext = targetJD ? targetJD.toLowerCase() : (document.getElementById('jd-text') ? document.getElementById('jd-text').value.toLowerCase() : "");
                 let earned=0, total=0, matched=[], missing=[], semanticMatches=[];
                 let activeSkills = [];
                 if(targetJD) {
-                    for (const [key, synonyms] of Object.entries(this.thesaurus)) {
-                        if (targetJD.toLowerCase().includes(key.toLowerCase())) activeSkills.push({name: key, required: true});
-                    }
-                } else {
-                    activeSkills = this.data.skills;
-                }
+                    for (const [key, synonyms] of Object.entries(this.thesaurus)) { if (targetJD.toLowerCase().includes(key.toLowerCase())) activeSkills.push({name: key, required: true}); }
+                } else { activeSkills = this.data.skills; }
                 activeSkills.forEach(s => {
-                    const w = s.required ? 5 : 1; 
-                    total += w;
+                    const w = s.required ? 5 : 1; total += w;
                     const synonyms = this.expandConcept(s.name);
                     let hit = null;
-                    for (const syn of synonyms) {
-                        const safeSyn = syn.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
-                        const regex = new RegExp(`\\b${safeSyn}\\b`, 'i');
-                        if (regex.test(t)) { hit = syn; break; }
-                    }
-                    if(hit) {
-                        earned += w;
-                        matched.push(s.name);
-                        if(hit !== s.name.toLowerCase()) semanticMatches.push(`${s.name} (via "${hit}")`);
-                    } else if(s.required) {
-                        missing.push(s.name);
-                    }
+                    for (const syn of synonyms) { const safeSyn = syn.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'); const regex = new RegExp(`\\b${safeSyn}\\b`, 'i'); if (regex.test(t)) { hit = syn; break; } }
+                    if(hit) { earned += w; matched.push(s.name); if(hit !== s.name.toLowerCase()) semanticMatches.push(`${s.name} (via "${hit}")`); } else if(s.required) { missing.push(s.name); }
                 });
                 const techScore = total > 0 ? Math.min(100, Math.round((earned/total)*100)) : 0;
                 const dna = (t.match(/strategy|lead/g)||[]).length > 2 ? 'STRATEGIC' : 'OPERATIONAL';
                 let criticalGaps = missing.length > 0 ? missing : [];
                 if(techScore < 100 && criticalGaps.length === 0) criticalGaps = matched.length > 0 ? [matched[0] + " (Depth)"] : ["Core Skills"];
-                let evidence = [
-                    `<b>DNA Match:</b> ${dna} Trajectory verified.`,
-                    `<b>Skill Density:</b> ${matched.length}/${activeSkills.length} matches found.`,
-                    `<b>Verified:</b> ${matched.join(', ') || 'None'}`
-                ];
+                let evidence = [`<b>DNA Match:</b> ${dna} Trajectory verified.`, `<b>Skill Density:</b> ${matched.length}/${activeSkills.length} matches found.`, `<b>Verified:</b> ${matched.join(', ') || 'None'}`];
                 if(semanticMatches.length > 0) evidence.push(`<span style="color:#059669"><b>Semantic Hits:</b> ${semanticMatches.join(', ')}</span>`);
                 if(criticalGaps.length > 0) evidence.push(`<span style="color:#dc2626"><b>Gap Alert:</b> Missing ${criticalGaps.join(', ')}</span>`);
-                const salesBullets = [
-                    `🎯 <b>Core Tech:</b> Verified experience in ${matched.slice(0,3).join(', ') || 'general competencies'}.`,
-                    `🧠 <b>Work Style:</b> Operates with a ${dna} approach to problem-solving.`,
-                    `📊 <b>Commercial:</b> Detected ${t.match(/%|\$|£/g)?.length||0} impact markers indicating ROI focus.`,
-                    `🚀 <b>Recommendation:</b> Strong fit for immediate ${jdContext.includes('lead')?'leadership':'delivery'} impact.`
-                ];
-                let gapReason = "";
-                if(techScore === 100) gapReason = "Candidate is a complete semantic match. Focus interview on cultural fit.";
-                else if(missing.length > 0) gapReason = `<b>Value Gap:</b> Missing specific evidence for <b>${missing[0]}</b>. <i>Probe: "Have you used ${missing[0]} in a commercial setting?"</i>`;
-                else gapReason = `<b>Depth Issue:</b> Weak evidence for <b>${matched[0]||'Core Skills'}</b>. <i>Probe: "Walk me through your most complex project using this skill."</i>`;
+                const salesBullets = [`🎯 <b>Core Tech:</b> Verified experience in ${matched.slice(0,3).join(', ') || 'general competencies'}.`, `🧠 <b>Work Style:</b> Operates with a ${dna} approach to problem-solving.`, `🚀 <b>Recommendation:</b> Fit for immediate leadership impact.`];
+                let gapReason = techScore === 100 ? "Candidate is a complete semantic match." : (missing.length > 0 ? `<b>Value Gap:</b> Missing specific evidence for <b>${missing[0]}</b>.` : `<b>Depth Issue:</b> Weak evidence for <b>${matched[0]||'Core Skills'}</b>.`);
                 
-                // --- FIXED QUESTION LOGIC (v85) ---
+                // Human Interview Questions
                 const skillContext = matched.length > 0 ? this.toTitleCase(matched[0]) : "Core Skills";
                 const gapContext = missing.length > 0 ? this.toTitleCase(missing[0]) : "Required Skills";
                 const dnaOpposite = dna === "STRATEGIC" ? "Operational" : "Strategic";
-
                 let questions = [
-                    { label: "Expertise", text: `"Describe a complex challenge you faced involving **${skillContext}**. What was your specific contribution?"` },
+                    { label: "Expertise", text: `"Describe a complex challenge involving **${skillContext}**. What was your specific contribution?"` },
                     { label: "Gap", text: `"You haven't listed **${gapContext}** on your profile. How would you handle a project requiring this?"` },
                     { label: "DNA", text: `"Your profile suggests a strong **${this.toTitleCase(dna)}** focus. Describe a time you had to adopt a **${dnaOpposite}** mindset."` },
                     { label: "Conflict", text: `"Describe a disagreement with a stakeholder. How did you resolve it?"` },
                     { label: "ROI", text: `"What is the first metric you would try to impact in your first 30 days?"` }
                 ];
-
                 const sell = `<b>Recruiter Pitch:</b> Strong ${dna} candidate with verified experience in ${matched.slice(0,3).join(', ')}.`;
                 return { score: techScore, matched, dna, evidence, questions, pitch: sell, salesBullets, gapReason, missing: criticalGaps };
             },
 
-            // --- UI FUNCTIONS ---
             setMode: function(m) {
-                this.mode = m;
-                document.querySelectorAll('.mode-btn').forEach(b => b.classList.remove('active'));
+                this.mode = m; document.querySelectorAll('.mode-btn').forEach(b => b.classList.remove('active'));
                 document.getElementById('btn-'+m).classList.add('active');
                 document.getElementById('panel-find').style.display = m==='find'?'grid':'none';
                 document.getElementById('panel-retain').style.display = m==='retain'?'grid':'none';
-                document.getElementById('lbl-dash').innerText = m==='find'?"Role Audit":"Role Vault";
-                document.getElementById('lbl-cand').innerText = m==='find'?"Talent Pipeline":"Employee Audit";
-                document.getElementById('lbl-comp').innerText = m==='find'?"Battle Matrix":"Mobility Map";
-                document.getElementById('compare-head').innerText = m==='find'?"Executive Comparison":"Internal Discovery Map";
                 if(m==='retain') this.renderVault();
                 this.nav('dashboard');
             },
@@ -513,7 +592,7 @@ Click Apply Now to start your journey with us.`;
                 document.querySelectorAll('.view-panel').forEach(e => e.classList.remove('active'));
                 document.getElementById('view-'+id).classList.add('active');
                 document.querySelectorAll('.nav-item').forEach(e => e.classList.remove('active'));
-                const map = {'dashboard':'nav-dash', 'candidates':'nav-cand', 'compare':'nav-comp'};
+                const map = {'dashboard':'nav-dash', 'candidates':'nav-cand', 'compare':'nav-comp', 'settings':'nav-set'};
                 document.getElementById(map[id]).classList.add('active');
                 if(id==='compare') this.renderSelector();
             },
@@ -527,64 +606,39 @@ Click Apply Now to start your journey with us.`;
                 const c = document.getElementById('skill-cloud'); c.innerHTML="";
                 this.data.skills.forEach((s,i)=>{
                     const t=document.createElement('div'); t.className=`skill-tag ${s.required?'required':''}`; t.innerText=s.name;
-                    t.onclick=()=>{ this.data.skills[i].required=!this.data.skills[i].required; this.renderSkills(); this.reScoreAll(); };
+                    t.onclick=()=>{ this.data.skills[i].required=!this.data.skills[i].required; this.renderSkills(); this.reScoreAll(); this.save(); };
                     c.appendChild(t);
                 });
             },
 
             addSingleCV: function() {
-                const txt = document.getElementById('cv-text').value;
-                if(!txt) return;
+                const txt = document.getElementById('cv-text').value; if(!txt) return;
                 const res = this.calculateMatch(txt);
                 this.data.candidates.push({ id: Date.now(), name: "Candidate "+(this.data.candidates.length+1), text: txt, ...res });
                 this.renderList(); this.save(); document.getElementById('cv-text').value="";
             },
 
-            reScoreAll: function() {
-                this.data.candidates.forEach((c,i)=>{ this.data.candidates[i] = {...c, ...this.calculateMatch(c.text)}; });
-                this.renderList();
-            },
+            reScoreAll: function() { this.data.candidates.forEach((c,i)=>{ this.data.candidates[i] = {...c, ...this.calculateMatch(c.text)}; }); this.renderList(); },
 
             renderList: function() {
                 const list = document.getElementById('candidate-list'); list.innerHTML="";
                 const blind = document.getElementById('blind-mode').checked;
                 this.data.candidates.sort((a,b)=>b.score-a.score).forEach((c,i)=>{
-                    list.innerHTML += `
-                    <div class="candidate-item">
-                        <div class="c-header" onclick="this.nextElementSibling.classList.toggle('open')">
-                            <div class="rank-badge">${i+1}</div>
-                            <div style="flex:1"><div class="c-name">${blind?'REDACTED':c.name}</div></div>
-                            <div class="dna-tag">${c.dna}</div>
-                            <div class="c-score" style="color:${c.score>70?'var(--primary)':'var(--warning)'}">${c.score}%</div>
-                        </div>
-                        <div class="c-details">
-                            <div class="verdict-box">${c.pitch}</div>
-                            <div class="gap-box">${c.gapReason}</div>
-                            <ul class="evidence-list">${(c.evidence || []).map(e => `<li class="evidence-item"><span class="evidence-icon ${e.includes('Gap')?'red':'green'}">${e.includes('Gap')?'⚠️':'✓'}</span> <span>${e}</span></li>`).join('')}</ul>
-                            <div style="font-size:0.7rem; font-weight:700; color:#64748b; margin-bottom:10px;">INTERVIEW GUIDE</div>
-                            ${c.questions.map(q=>`<div class="question-box"><b>${q.label}:</b> ${q.text}</div>`).join('')}
-                        </div>
-                    </div>`;
+                    list.innerHTML += `<div class="candidate-item"><div class="c-header" onclick="this.nextElementSibling.classList.toggle('open')"><div class="rank-badge">${i+1}</div><div style="flex:1"><div class="c-name">${blind?'REDACTED':c.name}</div></div><div class="dna-tag">${c.dna}</div><div class="c-score" style="color:${c.score>70?'var(--primary)':'var(--warning)'}">${c.score}%</div></div><div class="c-details"><div class="verdict-box">${c.pitch}</div><div class="gap-box">${c.gapReason}</div><ul class="evidence-list">${(c.evidence || []).map(e => `<li class="evidence-item"><span class="evidence-icon ${e.includes('Gap')?'red':'green'}">${e.includes('Gap')?'⚠️':'✓'}</span> <span>${e}</span></li>`).join('')}</ul><div style="font-size:0.7rem; font-weight:700; color:#64748b; margin-bottom:10px;">INTERVIEW GUIDE</div>${c.questions.map(q=>`<div class="question-box"><b>${q.label}:</b> ${q.text}</div>`).join('')}</div></div>`;
                 });
             },
 
             addToVault: function() {
-                const title = document.getElementById('vault-title').value;
-                const jd = document.getElementById('vault-jd').value;
-                if(!title || !jd) { alert("Please enter both a Role Title and a Description."); return; }
-                this.data.roleLibrary.push({ id: Date.now(), title: title, text: jd });
-                this.save();
-                this.renderVault();
-                document.getElementById('vault-title').value = "";
-                document.getElementById('vault-jd').value = "";
+                const title = document.getElementById('vault-title').value; const jd = document.getElementById('vault-jd').value;
+                if(!title || !jd) return;
+                this.data.roleLibrary.push({ id: Date.now(), title: title, text: jd }); this.save(); this.renderVault();
+                document.getElementById('vault-title').value = ""; document.getElementById('vault-jd').value = "";
             },
 
             renderVault: function() {
                 const l = document.getElementById('vault-list'); l.innerHTML="";
                 document.getElementById('vault-count').innerText=this.data.roleLibrary.length;
-                this.data.roleLibrary.forEach((r,i)=>{
-                    l.innerHTML+=`<div class="vault-item"><b>${r.title}</b> <button style="color:red; border:none; background:none; cursor:pointer;" onclick="window.App.delVault(${i})">×</button></div>`;
-                });
+                this.data.roleLibrary.forEach((r,i)=>{ l.innerHTML+=`<div class="vault-item"><b>${r.title}</b> <button style="color:red; border:none; background:none;" onclick="window.App.delVault(${i})">×</button></div>`; });
             },
 
             delVault: function(i) { this.data.roleLibrary.splice(i,1); this.save(); this.renderVault(); },
@@ -593,20 +647,19 @@ Click Apply Now to start your journey with us.`;
                 const g = document.getElementById('selector-grid'); g.innerHTML="";
                 this.data.candidates.forEach(c=>{
                     const b=document.createElement('div'); b.className=`skill-tag ${this.selected.includes(c.id)?'required':''}`; b.innerText=c.name;
-                    b.onclick=()=>{ 
-                        if(this.selected.includes(c.id)) this.selected=this.selected.filter(x=>x!==c.id);
-                        else { if(this.mode==='retain') this.selected=[c.id]; else this.selected.push(c.id); }
-                        this.renderSelector();
-                    };
+                    b.onclick=()=>{ if(this.selected.includes(c.id)) this.selected=this.selected.filter(x=>x!==c.id); else { if(this.mode==='retain') this.selected=[c.id]; else this.selected.push(c.id); } this.renderSelector(); };
                     g.appendChild(b);
                 });
             },
 
             generateBattle: function() {
                 const out = document.getElementById('battle-output');
+                document.getElementById('report-meta').innerText = `Prepared for: ${this.data.settings.org} | ${new Date().toLocaleDateString()}`;
+                
                 if(this.mode==='find') {
                     const cands = this.data.candidates.filter(c=>this.selected.includes(c.id));
                     if(cands.length===0) return out.innerHTML="Select candidates.";
+                    document.getElementById('report-header').style.display='block';
                     let html=`<div class="battle-table" style="grid-template-columns:150px repeat(${cands.length}, 1fr)">`;
                     html+=`<div class="bt-row"><div class="bt-cell bt-label-col">Candidate</div>${cands.map(c=>`<div class="bt-cell" style="font-weight:700">${c.name}</div>`).join('')}</div>`;
                     html+=`<div class="bt-row"><div class="bt-cell bt-label-col">Score</div>${cands.map(c=>`<div class="bt-cell" style="font-size:1.2rem; font-weight:800; color:var(--primary)">${c.score}%</div>`).join('')}</div>`;
@@ -617,23 +670,17 @@ Click Apply Now to start your journey with us.`;
                     if(this.selected.length!==1) return out.innerHTML="Select 1 Employee.";
                     const emp = this.data.candidates.find(c=>c.id===this.selected[0]);
                     let html=`<h4>Mobility Map: ${emp.name}</h4><div class="battle-table" style="grid-template-columns:1.5fr 0.5fr 2.5fr">`;
-                    html+=`<div class="bt-row" style="background:#f8fafc; font-weight:700; color:#64748b; font-size:0.7rem;"><div class="bt-cell">Target Role</div><div class="bt-cell">Fit</div><div class="bt-cell">Mobility Logic</div></div>`;
-
+                    html+=`<div class="bt-row" style="background:#f8fafc; font-weight:700;"><div class="bt-cell">Target Role</div><div class="bt-cell">Fit</div><div class="bt-cell">Mobility Logic</div></div>`;
                     this.data.roleLibrary.forEach(r=>{
                         const m = this.calculateMatch(emp.text, r.text);
-                        let logic = "";
-                        if(m.score >= 80) logic = `✅ <b>Ready Now:</b> Leverages existing strength in ${m.matched.slice(0,3).join(', ')}.`;
-                        else if(m.score >= 50) logic = `📈 <b>Upskill Path:</b> Has ${m.matched[0]||'DNA'} base, but needs ${m.missing.slice(0,2).join(', ')}.`;
-                        else logic = `⚠️ <b>Long Term:</b> Gap in core skills (${m.missing.slice(0,2).join(', ')}).`;
-
-                        html+=`<div class="bt-row"><div class="bt-cell"><b>${r.title}</b></div><div class="bt-cell" style="color:${m.score>70?'green':(m.score>40?'orange':'#dc2626')}"><b>${m.score}%</b></div><div class="bt-cell" style="font-size:0.75rem; text-align:left;">${logic}</div></div>`;
+                        let logic = m.score >= 80 ? `✅ <b>Ready Now:</b> Leverages ${m.matched.slice(0,2).join(', ')}.` : (m.score >= 50 ? `📈 <b>Stretch:</b> Needs ${m.missing.slice(0,1).join(', ')}.` : `⚠️ <b>Long Term.</b>`);
+                        html+=`<div class="bt-row"><div class="bt-cell"><b>${r.title}</b></div><div class="bt-cell"><b>${m.score}%</b></div><div class="bt-cell" style="font-size:0.75rem;">${logic}</div></div>`;
                     });
                     out.innerHTML=html+"</div>";
                 }
             }
         };
-
-        window.onload = function() { try{window.App.init()}catch(e){console.log(e); localStorage.clear(); location.reload()} };
+        // Wait for login to init
     </script>
 </body>
 </html>
